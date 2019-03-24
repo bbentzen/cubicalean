@@ -6,12 +6,12 @@ Author: Bruno Bentzen
 
 import .interval
 
-universes u v 
+universes u
 
 -- cubical types
 
-@[simp] def cubical_set : ℕ → Type.{u+1}
-| 0     := Type.{u}
+@[simp] def cubical_set : ℕ → Type (u+1)
+| 0     := Type u
 | (n+1) := I → cubical_set n
 
 notation n `-Type`:80 := cubical_set n

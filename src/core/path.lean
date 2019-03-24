@@ -15,12 +15,14 @@ structure pathd {n : ℕ} (A : I → n-Type) (a : n-(A i0)) (b : n-(A i1)) :=
 
 namespace pathd
 
-def pathd.abs {n} {A : I → n-Type} (p : (n+1)-A) : pathd A (p i0) (p i1) :=
+def abs {n} {A : I → n-Type} (p : (n+1)-A) : pathd A (p i0) (p i1) :=
 pathd.mk p rfl rfl 
 
-def pathd.app {n : ℕ} (A : I → n-Type) (a : n-(A i0)) (b : n-(A i1))
+def app {n : ℕ} {A : I → n-Type} {a : n-(A i0)} {b : n-(A i1)}
   (p : pathd A a b) : (n+1)-A :=
 pathd.rec (λ p _ _, p) p 
+
+prefix `@@`:80 := app
 
 end pathd
 

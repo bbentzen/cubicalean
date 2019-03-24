@@ -6,7 +6,7 @@ Author: Bruno Bentzen
 
 import .types
 
-universes u v 
+universes u
 
 -- cubical terms
 

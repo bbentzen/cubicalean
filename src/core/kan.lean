@@ -6,7 +6,7 @@ Author: Bruno Bentzen
 
 import .terms
 
-universes u v
+universes u
 
 -- homogeneous Kan composition for lines and open boxes
 
@@ -21,8 +21,8 @@ prefix `⊔`:80 := horn1
 structure has_hcom (A : 0-Type) :=  
 (hcom : ⊔ A → 2-(λ _ _, A))
 (lid : Π u : ⊔ A, hcom u i0 = u.lid)
-(t0 : Π u : ⊔ A, hcom u i0 = u.t0)
-(t1 : Π u : ⊔ A, hcom u i1 = u.t1)
+(t0 : Π u : ⊔ A, (λ i, hcom u i i0) = u.t0)
+(t1 : Π u : ⊔ A, (λ i, hcom u i i1) = u.t1)
 (eq0 : Π u : ⊔ A, hcom u i1 i0 = u.t0 i1)
 (eq1 : Π u : ⊔ A, hcom u i1 i1 = u.t1 i1) 
 
@@ -44,17 +44,17 @@ end coe
 
 structure horn2 (A : 0-Type) := (lid t0i t1i t0j t1j : 2-(λ _ _, A)) 
 (lid0j : lid i0 = t0j i0)
-(lid1j : lid i1 = t0j i0)
-(lid0i : (λ i, lid i i0) = t0i i0)
-(lid1i : (λ i, lid i i1) = t1i i0)
-(t0i0j : t0i i0 = λ i, t0j i i0)
-(t0i1j : t0i i1 = λ i, t1j i i0)
-(t1i0j : t1i i0 = λ i, t0j i i1)
-(t1i1j : t1i i1 = λ i, t1j i i1)
+(lid1j : lid i1 = t1j i0)
+(lid0i : (λ j, lid j i0) = t0i i0)
+(lid1i : (λ j, lid j i1) = t1i i0)
+(t0i0j : (λ j, t0i j i0) = λ i, t0j i i0)
+(t0i1j : (λ j, t0i j i1) = λ i, t1j i i0)
+(t1i0j : (λ j, t1i j i0) = λ i, t0j i i1)
+(t1i1j : (λ j, t1i j i1) = λ i, t1j i i1)
 
 prefix `⊔`:80 := horn1
 
-structure has_hcom2 (A : 0-Type) :=  
+structure has_hcom2 (A : 0-Type) :=
 (hcom2 : horn2 A → 3-(λ _ _ _, A))
 (lid : Π u : horn2 A, hcom2 u i0 = u.lid)
 (t0j : Π u : horn2 A, (λ j, hcom2 u j i0) = u.t0j)
@@ -65,5 +65,16 @@ structure has_hcom2 (A : 0-Type) :=
 (eq1j : Π u : horn2 A, (hcom2 u i1) i1 = u.t1j i1) 
 (eq0i : Π u : horn2 A, (λ j, (hcom2 u i1) j i0) = u.t0i i1)
 (eq1i : Π u : horn2 A, (λ j, (hcom2 u i1) j i1) = u.t1i i1)
+(has1 : has_hcom A)
 
 --TODO: define hcom for n-cubes
+
+/-structure horn2 (A : 0-Type) := (lid t0i t1i t0j t1j : 2-(λ _ _, A)) 
+(lid0j : lid i0 = t0j i0)
+(lid1j : lid i1 = t0j i0)
+(lid0i : (λ i, lid i i0) = t0i i0)
+(lid1i : (λ i, lid i i1) = t1i i0)
+(t0i0j : t0i i0 = λ i, t0j i i0)
+(t0i1j : t0i i1 = λ i, t1j i i0)
+(t1i0j : t1i i0 = λ i, t0j i i1)
+(t1i1j : t1i i1 = λ i, t1j i i1)-/
