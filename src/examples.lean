@@ -6,25 +6,38 @@ Author: Bruno Bentzen
 
 import ..src.core.types
 
-universes u v 
+open interval type
 
-open type
+variables (A : I → I → Type) (a : Π j i, A j i)
 
-example (A : 3-Type) : face0 (type.face0 A) = face0 (face0 A) := rfl 
+-- adjacency conditions are immediate
 
-example (A : 3-Type) : face0 (deg A) = A := rfl 
+example : a i0 i0 = (λ i, a i i0) i0 := rfl 
 
-example (A : 3-Type) : face0 (deg (face0 A)) = face0 A := rfl 
+example : a i1 i0 = (λ i, a i i0) i1 := rfl
 
-example (A : 3-Type) : 2-Type := face0 A
+example : a i0 i1 = (λ i, a i i1) i0 := rfl
 
-variables A : 4-Type
-#reduce face0 (deg A) 
-#reduce (deg A)
+example : a i1 i1 = (λ i, a i i1) i1 := rfl
 
-#reduce face0 (deg (face0 A))
-#reduce face0 A
+/-                                                                        
 
-example (X : 2-Type) : face0 (deg (face0 X)) = face0 X := rfl 
+(λ i, a i1 i) i1 = (λ j, a j i1) i1 ======= (λ i, a i1 i) i1 = (λ j, a j i1) i1        --> i        
+                ||                                              |                   j | 
+                ||                                              |                     v
+                ||                                              |
+    λ j, a j i0 ||                     a                        | a j i1 
+                ||                                              |
+                ||                                              |
+                ||                                              v
+(λ i, a i1 i) i1 = (λ j, a j i1) i1 ======= (λ i, a i1 i) i1 = (λ j, a j i1) i1 
 
-example (X : 2-Type) : face1 (deg (face0 X)) = face0 X := rfl 
+-/
+
+-- faces and degeneracies 
+
+example : (λ _, a) i0 = a := rfl 
+
+example : (λ _, a) i1 = a := rfl 
+
+example : (λ _, a i0) i1 = a i0 := rfl 
