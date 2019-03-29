@@ -4,7 +4,7 @@ Released under the Apache License 2.0 (see "License");
 Author: Bruno Bentzen
 -/
 
-import ..core.path
+import ..core.path ..path.connections
 
 open interval
 
@@ -45,3 +45,25 @@ begin
 end
 
 end path
+
+namespace refl
+
+open path
+
+lemma eq {A : Type} {a : A} {p : I → A} (h : p = λ _, a ) {h0 : p i0 = a } {h1 : p i1 = a} : 
+  path.refl a = path.abs p h0 h1 :=
+by cases h; refl
+
+lemma meet {A : Type} {a b : A} (kan : has_hcom2 A) (p : path A a b) :
+  path.refl a = 
+  path.abs (meet kan (app p) i0) 
+    (eq.trans (meet.face0j0i kan (app p)) (path.app0 p)) 
+    (eq.trans (meet.face0j1i kan (app p)) (path.app0 p)) :=
+begin
+  apply eq,
+  transitivity,
+  apply meet.face0j kan (app p),
+  apply funext, intro, apply path.app0
+end
+
+end refl 

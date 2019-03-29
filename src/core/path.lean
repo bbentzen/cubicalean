@@ -124,6 +124,11 @@ def tyeq {A : I → Type} {a : A i0} {b : A i1} (p : pathdp A a b) :
   pathd A a b = pathd A (p@@i0) (p@@i1) :=
 by rw app0; rw app1
 
+def abs_irrel {A : I → Type} {a : A i0} {b : A i1} {p : Π i, A i} 
+        (q : pathd A a b) {p0 p0' : p i0 = a} {p1 p1' : p i1 = b} : 
+  abs p p0 p1 = q → abs p p0' p1' = q  :=
+pathdp.abs_irrel q
+
 end pathd
 
 -- non-dependent path types
@@ -155,5 +160,10 @@ pathd.app1 p
 def tyeq {A : Type} {a b : A} (p : path A a b) : 
   path A a b = path A (p@@i0) (p@@i1) :=
 by rw app0; rw app1
+
+def abs_irrel {A : Type} {a b : A} {p : I → A} 
+        (q : path A a b) {p0 p0' : p i0 = a} {p1 p1' : p i1 = b} : 
+  abs p p0 p1 = q → abs p p0' p1' = q  :=
+pathd.abs_irrel q
 
 end path

@@ -10,7 +10,7 @@ open pathd
 
 namespace path
 
-def funext {A B : Type} {f g : A → B} : 
+theorem funext {A B : Type} {f g : A → B} : 
   (∀ x, path B (f x) (g x)) → path (A → B) f g :=
 λ h, path.abs (λ i x, ((h x) @@ i))
 (funext (λ x, app0 (h x)))
