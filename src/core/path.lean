@@ -4,7 +4,7 @@ Released under the Apache License 2.0 (see "License");
 Author: Bruno Bentzen
 -/
 
-import .kan
+import core.kan.hcom
 
 open interval
 
@@ -18,7 +18,7 @@ namespace pathdp
 
 @[reducible] def app {A : I → Type} {A0 A1 : Type} {a : A0} {b : A1} 
   (p : pathdp A a b) (i : I) : A i :=
-by induction p with p; exact p i --pathdp.rec (λ p _ _ _ _, p i) p
+by induction p with p; exact p i
 
 def beta {A : I → Type} {A0 A1 : Type} {a : A0} {b : A1} (p : Π i, A i)
          {ha : A0 = A i0} {hb : A1 = A i1}
@@ -49,14 +49,14 @@ begin
 end
 
 def abs_irrel {A : I → Type} {A0 A1 : Type} {a : A0} {b : A1} {p : Π i, A i} 
-        (q : pathdp A a b)  {ha ha' : A0 = A i0} {hb hb' : A1 = A i1} 
-        {p0 p0' : p i0 = eq.mp ha a} {p1 p1' : p i1 = eq.mp hb b} : 
+              (q : pathdp A a b)  {ha ha' : A0 = A i0} {hb hb' : A1 = A i1} 
+              {p0 p0' : p i0 = eq.mp ha a} {p1 p1' : p i1 = eq.mp hb b} : 
   pathdp.abs p ha hb p0 p1 = q → pathdp.abs p ha' hb' p0' p1' = q  :=
 by intro h; induction h; rw proof_irrel p0
 
 def abseq {A : I → Type} {A0 A1 : Type} {a : A0} {b : A1} {p q : Π i, A i} 
-        (h : p = q) {ha : A0 = A i0} {hb : A1 = A i1} 
-        {p0 : p i0 = eq.mp ha a} {p1 : p i1 = eq.mp hb b} : 
+          (h : p = q) {ha : A0 = A i0} {hb : A1 = A i1} 
+          {p0 : p i0 = eq.mp ha a} {p1 : p i1 = eq.mp hb b} : 
   pathdp.abs p ha hb p0 p1 = pathdp.abs q ha hb (eq.rec p0 h) (eq.rec p1 h) :=
 by induction h; simp
 
@@ -99,7 +99,7 @@ def pathd (A : I → Type) (a : A i0) (b : A i1) := pathdp A a b
 
 namespace pathd
 
-def abs {A : I → Type} {a : A i0} {b : A i1} (p : Π i, A i)
+@[simp] def abs {A : I → Type} {a : A i0} {b : A i1} (p : Π i, A i)
   (p0 : p i0 = a) (p1 : p i1 = b) : pathd A a b :=
 @pathdp.abs A (A i0) (A i1) _ _ p rfl rfl p0 p1
 
@@ -137,33 +137,29 @@ def path (A : Type) (a : A) (b : A) := pathd (λ _, A) a b
 
 namespace path
 
-def abs {A : Type} {a b : A} (p : Π i, A) (p0 : p i0 = a) (p1 : p i1 = b) :
-  path A a b :=
+@[simp] def abs {A : Type} {a b : A} (p : Π i, A) (p0 : p i0 = a) (p1 : p i1 = b) : path A a b :=
 pathd.abs p p0 p1
 
-@[simp] def app {A : Type} {a b : A} (p : path A a b) :
-  I → A := 
+@[simp] def app {A : Type} {a b : A} (p : path A a b) : I → A := 
 pathdp.app p
 
 def eta {A : Type} {a b : A} (p : path A a b) (p0 : app p i0 = a) (p1 : app p i1 = b) : 
   abs (app p) p0 p1 = p :=
 pathd.eta p p0 p1
 
-def app0 {A : Type} {a b : A} (p : path A a b) :
-  p @@ i0 = a :=
-pathd.app0 p
+def app0 {A : Type} {a b : A} (p : path A a b) : p @@ i0 = a := pathd.app0 p
 
-def app1 {A : Type} {a b : A} (p : path A a b) :
-  p @@ i1 = b :=
-pathd.app1 p
+def app1 {A : Type} {a b : A} (p : path A a b) : p @@ i1 = b := pathd.app1 p
 
-def tyeq {A : Type} {a b : A} (p : path A a b) : 
-  path A a b = path A (p@@i0) (p@@i1) :=
+def tyeq {A : Type} {a b : A} (p : path A a b) : path A a b = path A (p@@i0) (p@@i1) :=
 by rw app0; rw app1
 
-def abs_irrel {A : Type} {a b : A} {p : I → A} 
-        (q : path A a b) {p0 p0' : p i0 = a} {p1 p1' : p i1 = b} : 
+def abs_irrel {A : Type} {a b : A} {p : I → A} (q : path A a b) {p0 p0' : p i0 = a} {p1 p1' : p i1 = b} : 
   abs p p0 p1 = q → abs p p0' p1' = q  :=
 pathd.abs_irrel q
+
+def abs_irrel' {A : Type} {a b : A} {p : I → A} (q : path A a b) {p0 p0' : p i0 = a} {p1 p1' : p i1 = b} : 
+  abs p p0 p1 = abs p p0' p1'  :=
+by apply abs_irrel (abs p p0' p1'); refl
 
 end path

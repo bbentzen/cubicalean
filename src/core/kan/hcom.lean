@@ -4,25 +4,16 @@ Released under the Apache License 2.0 (see "License");
 Author: Bruno Bentzen
 -/
 
-import .ncubes
+import .basic
 
 universes u
-
--- coercion for n-dimensional cubes
-
-namespace coe
-
-structure has_coe (A : I → Type) :=  
-(coe : Π i, A i → Π j, A j)
-(coeq : Π i a, coe i a i = a)
-
-end coe
 
 -- homogeneous Kan composition for lines and open boxes
 
 open interval
 
-structure horn1 (A : Type) := (lid t0 t1 : I → A)
+structure horn1 (A : Type) :=
+(lid t0 t1 : I → A)
 (lid0 : lid i0 = t0 i0)
 (lid1 : lid i1 = t1 i0)
 
@@ -42,7 +33,8 @@ notation `hcom` lid `[[` tube0 `;` tube1 `]]` kan :=  hcom kan (horn1.mk lid tub
 
 -- homogeneous Kan composition for squares and open cubes
 
-structure horn2 (A : Type) := (lid t0i t1i t0j t1j : I → I → A) 
+structure horn2 (A : Type) :=
+(lid t0i t1i t0j t1j : I → I → A) 
 (lid0j : lid i0 = t0j i0)
 (lid1j : lid i1 = t1j i0)
 (lid0i : (λ j, lid j i0) = t0i i0)

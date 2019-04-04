@@ -4,9 +4,9 @@ Released under the Apache License 2.0 (see "License");
 Author: Bruno Bentzen
 -/
 
-import ..src.core.types
+import ..core.interval
 
-open interval type
+open interval
 
 variables (A : I → I → Type) (a : Π j i, A j i)
 
